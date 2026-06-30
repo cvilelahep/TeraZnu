@@ -37,7 +37,10 @@ def main():
     fw = Framework(hepmc_file, max_events=args.max_events, verbose=True)
 
     # Neutrino generator (for signal events only)
-    fw.add_module(NeutrinoGenerator)
+    fw.add_module(NeutrinoGenerator())
 
+    for record in fw.run():
+        pass
+    
 if __name__ == "__main__":
     main()

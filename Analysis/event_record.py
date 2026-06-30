@@ -17,6 +17,8 @@ class Particle:
     pz: float
     energy: float
     mass: float
+    production_vertex: int
+    end_vertex: int
 
     @property
     def pt(self) -> float:
