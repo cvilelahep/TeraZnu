@@ -6,7 +6,7 @@ class HepmcReader:
         self.path = path
 
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[EventRecord]:
         with pyhepmc.open(self.path) as f_hepmc:
             while(event := f_hepmc.read()): 
                 record = EventRecord()
