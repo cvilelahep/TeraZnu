@@ -77,8 +77,8 @@ class EventRecord:
     weights: list[float] = field(default_factory=list)
 
     # --- content ---
-    particles: dict[int, Particle] = field(default_factory=dict)   # barcode → Particle
-    vertices: dict[int, Vertex] = field(default_factory=dict)      # barcode → Vertex
+    particles: dict[int, Particle] = field(default_factory=dict)
+    vertices: dict[int, Vertex] = field(default_factory=dict)
 
     # --- module outputs ---
     extras: dict[str, Any] = field(default_factory=dict)
