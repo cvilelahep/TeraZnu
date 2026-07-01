@@ -19,10 +19,16 @@ class NeutrinoGenerator(BaseModule):
     def process(self, record: EventRecord) -> None:
 
         print("NeutrinoGenerator called")
-        
-        path_lengths = []
-        pids = []
-        energies = []
+
+        # Arrays for choosing interacting neutrino
+        # For calculating interaction probability: path_length, pid, energy    
+        path_length = []
+        pid = []
+        energy = []
+
+        # Useful for later
+        nu_vertex = []
+        calo_interaction_length = []
 
         # Loop through vertices:
         for i_p, p in record.particles.items():
@@ -30,6 +36,16 @@ class NeutrinoGenerator(BaseModule):
                 continue
             if abs(p.pid) not in [12, 14, 16]: # Neutrino
                 continue
+
+            nu_candidate_vtx = self.geometry.getRandomPointCalo(record.vertices[p.production_vertex].x, record.vertices[p.production_vertex].y, record.vertices[p.production_vertex].z, p.px, p.py, p.pz)
+
+            path_length.append(nu_candidate_vtx["path_length_for_xsec"])
+            pid.append(p.pid)
+            energy.append(p.energy)
+
+            nu_vertex.append(nu_candidate_vtx["vertex"])
+            calo_interaction_length.append(nu_candidate_vtx["calo_interaction_length"])
+
             print(f"Found neutrino {p.pid} pos ({record.vertices[p.production_vertex].x}, {record.vertices[p.production_vertex].y}, {record.vertices[p.production_vertex].z}) mom ({p.px}, {p.py}, {p.pz})")
-            print(self.geometry.getRandomPointCalo(record.vertices[p.production_vertex].x, record.vertices[p.production_vertex].y, record.vertices[p.production_vertex].z, p.px, p.py, p.pz))
+            print(nu_candidate_vtx)
 
