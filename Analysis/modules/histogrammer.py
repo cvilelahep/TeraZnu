@@ -41,9 +41,13 @@ class Histogrammer(BaseModule):
         self.data = np.array(self.data)
         
         flavour_mask = {}
+        n_tot = 0.
         for f in set(self.data[:,3]):
             flavour_mask[f] = self.data[:,3] == f
-            print(f"Number of {f}: {np.sum(self.data[:,5][flavour_mask[f]])*self.N_norm/self.counter}")
+            n_f = np.sum(self.data[:,5][flavour_mask[f]])*self.N_norm/self.counter
+            n_tot += n_f
+            print(f"Number of {f}: {n_f}")
+        print(f"Total: {n_tot}")
 
         plt.figure()
         for f, mask in flavour_mask.items():
@@ -60,8 +64,19 @@ class Histogrammer(BaseModule):
 
         plt.figure()
         for f, mask in flavour_mask.items():
-            plt.hist(self.data[:,4][mask], range = (35000, 55000), bins = 20, weights = self.data[:,5][mask]*self.N_norm/self.counter)
+            plt.hist(self.data[:,4][mask], range = (35000, 55000), bins = 20, weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f, histtype = "step")
         plt.xlabel("Neutrino energy [MeV]")
+
+        plt.figure()
+
+        vertex_norm = np.sqrt(np.multiply(self.data[:,0], np.multiply(self.data[:,1], self.data[:,2])))
+        cos_theta = np.divide(self.data[:,2], vertex_norm)
+
+        for f, mask in flavour_mask.items():
+            plt.hist(cos_theta[mask], range = (-1, 1), bins = 20, histtype = "step", label = f)
+        plt.xlabel(r"cos$\theta$")
+
+
         plt.show()
 
         

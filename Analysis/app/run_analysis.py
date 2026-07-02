@@ -31,7 +31,7 @@ def main():
     geometry = Geometry(cfg)
 
     # ── Build the pipeline ────────────────────────────────────────────────
-    fw = Framework(cfg["hepmc_file"], max_events=cfg["max_events"], verbose=False)
+    fw = Framework(cfg["hepmc_file"], max_events=cfg["max_events"], verbose=True)
 
     # Neutrino generator (for signal events only)
     fw.add_module(NeutrinoGenerator(geometry, cfg))

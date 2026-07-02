@@ -68,7 +68,7 @@ class NeutrinoGenerator(BaseModule):
         # Add neutrino interaction to event record
         nu_gen_record = {}
 
-        nu_gen_record["interaction_prob"] = interaction_probability[i_nu]
+        nu_gen_record["interaction_prob"] = np.sum(interaction_probability)
         nu_gen_record["vertex"] = nu_vertex[i_nu]
         nu_gen_record["momentum"] = nu_mom[i_nu]
         nu_gen_record["energy"] = energy[i_nu]
