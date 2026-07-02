@@ -52,7 +52,6 @@ class Framework:
 
         # begin
         for m in self._modules:
-            print(m)
             m.begin()
 
         t0 = time.perf_counter()

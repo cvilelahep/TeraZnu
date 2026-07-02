@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from framework import Framework
 from geometry import Geometry
 from modules.neutrino_generator import NeutrinoGenerator
+from modules.histogrammer import Histogrammer
 
 from config_module import Config
 
@@ -34,6 +35,9 @@ def main():
 
     # Neutrino generator (for signal events only)
     fw.add_module(NeutrinoGenerator(geometry, cfg))
+
+    # Histogrammer
+    fw.add_module(Histogrammer(cfg))
 
     for record in fw.run():
         pass

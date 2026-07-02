@@ -1,8 +1,6 @@
 from base_module import BaseModule
 from event_record import EventRecord
-from geometry import Geometry
 import numpy as np
-from random_gen import rng
 
 from hepunits import units as u
 class NeutrinoGenerator(BaseModule):
@@ -11,17 +9,17 @@ class NeutrinoGenerator(BaseModule):
     def name(self) -> str:
         return "NeutrinoGenerator"
 
-    def __init__(self, geometry):
+    def __init__(self, geometry, cfg):
         self.geometry = geometry
         # For now use linear approximation. In future, get from generator (MadGraph?)
-        self.nu_CC_cross_section = 0.667e-38*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
-        self.nubar_CC_cross_section = 0.334e-38*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
+        self.nu_CC_cross_section = cfg["Neutrino"]["nu_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
+        self.nubar_CC_cross_section = cfg["Neutrino"]["nubar_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
 
-        self.target_density = self.geometry.density / (1.6726e-27*u.kg) # nucleons / cm3
+        self.target_density = self.geometry.density / (cfg["Constants"]["proton_mass"]*u.kg) # nucleons / cm3
+       
+        self.rng = cfg["rng"]
 
     def process(self, record: EventRecord) -> None:
-
-        print("NeutrinoGenerator called")
 
         # Arrays for choosing interacting neutrino
         # For calculating interaction probability: path_length, pid, energy    
@@ -29,9 +27,10 @@ class NeutrinoGenerator(BaseModule):
         pid = []
         energy = []
 
-        # Useful for later
+        # For the record
         nu_vertex = []
         calo_interaction_length = []
+        nu_mom = []
 
         # Loop through vertices:
         for i_p, p in record.particles.items():
@@ -48,9 +47,7 @@ class NeutrinoGenerator(BaseModule):
 
             nu_vertex.append(nu_candidate_vtx["vertex"])
             calo_interaction_length.append(nu_candidate_vtx["calo_interaction_length"])
-
-            print(f"Found neutrino {p.pid} pos ({record.vertices[p.production_vertex].x}, {record.vertices[p.production_vertex].y}, {record.vertices[p.production_vertex].z}) mom ({p.px}, {p.py}, {p.pz})")
-            print(nu_candidate_vtx)
+            nu_mom.append([p.px, p.py, p.pz])
 
         interaction_probability = []
         for i in range(len(path_length)):
@@ -63,8 +60,26 @@ class NeutrinoGenerator(BaseModule):
         if cumulative[-1] == 0:
             return
         
+        # Randomly pick interacting neutrino according to probability
         cumulative /= cumulative[-1]
-        rand = rng.uniform()
-        print(rand, cumulative, np.digitize(rand, cumulative))
+        rand = self.rng.uniform()
+        i_nu = np.digitize(rand, cumulative)
 
+        # Add neutrino interaction to event record
+        nu_gen_record = {}
+
+        nu_gen_record["interaction_prob"] = interaction_probability[i_nu]
+        nu_gen_record["vertex"] = nu_vertex[i_nu]
+        nu_gen_record["momentum"] = nu_mom[i_nu]
+        nu_gen_record["energy"] = energy[i_nu]
+        nu_gen_record["pid"] = pid[i_nu]
+
+
+
+        # TO-DO (with neutrino simulation)
+        # Add hadronic energy
+        # Add puch-through energy
+        # Add muon kinematics
+        # Add dual read-out calo measurements
+        record.extras[self.name] = nu_gen_record
 
