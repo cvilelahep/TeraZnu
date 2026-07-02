@@ -74,7 +74,7 @@ class Histogrammer(BaseModule):
 
         plt.figure()
         for f, mask in flavour_mask.items():
-            plt.hist(cos_theta[mask], range = (-1, 1), bins = 20, histtype = "step", label = f)
+            plt.hist(cos_theta[mask], range = (-1, 1), bins = 20, weights = self.data[:,5][mask]*self.N_norm/self.counter, histtype = "step", label = f)
         plt.xlabel(r"cos$\theta$")
         plt.legend()
 
