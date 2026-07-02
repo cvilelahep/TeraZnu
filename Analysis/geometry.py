@@ -1,5 +1,6 @@
 from skspatial.objects import Vector, Point, Line, Cylinder
 import numpy as np
+from random_gen import rng
 
 def getIntersection(cylinder, pos, mom):
     line = Line(point = pos, direction = mom)
@@ -25,8 +26,6 @@ class Geometry:
         self.inner_cylinder = Cylinder(point = [0, 0, 0], vector = [0, 0, self.calo_hl*2], radius = self.calo_ir)
         self.outer_cylinder = Cylinder(point = [0, 0, 0], vector = [0, 0, self.calo_hl*2], radius = self.calo_or)
 
-        self.rng = np.random.default_rng(314159)
-
     def getRandomPointCalo(self, x, y, z, px, py, pz):
 
         pos = Point([x, y, z])
@@ -49,9 +48,8 @@ class Geometry:
             out_in_vector = Vector(outer_intersection[0] - inner_intersection[0])
 
             path_length_for_xsec = out_in_vector.norm()
-            rand = self.rng.uniform()
+            rand = rng.uniform()
             calo_interaction_lengths = path_length_for_xsec*(1-rand)/self.interaction_length
             vertex = inner_intersection[0] + rand*out_in_vector
-
 
             return {"path_length_for_xsec": path_length_for_xsec, "calo_interaction_length": calo_interaction_lengths, "vertex": list(vertex)}
