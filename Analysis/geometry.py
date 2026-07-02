@@ -1,6 +1,6 @@
 from skspatial.objects import Vector, Point, Line, Cylinder
 import numpy as np
-from random_gen import rng
+from hepunits import units as u
 
 def getIntersection(cylinder, pos, mom):
     line = Line(point = pos, direction = mom)
@@ -14,17 +14,19 @@ def getIntersection(cylinder, pos, mom):
 
 
 class Geometry:
-    def __init__(self, calo_halflength, calo_inner_radius, calo_outer_radius, density, Z, A, interaction_length):
-        self.calo_hl = calo_halflength
-        self.calo_ir = calo_inner_radius
-        self.calo_or = calo_outer_radius
-        self.density = density
-        self.Z = Z
-        self.A = A
-        self.interaction_length = interaction_length
+    def __init__(self, cfg):
+        self.calo_hl = cfg["calorimeter"]["halflength"]*u.m
+        self.calo_ir = cfg["calorimeter"]["inner_radius"]*u.m
+        self.calo_or = cfg["calorimeter"]["outer_radius"]*u.m
+        self.density = cfg["calorimeter"]["density"]*u.g/u.cm3
+        self.Z = cfg["calorimeter"]["Z"]
+        self.A = cfg["calorimeter"]["A"]
+        self.interaction_length = cfg["calorimeter"]["interaction_length"]*u.cm
 
         self.inner_cylinder = Cylinder(point = [0, 0, 0], vector = [0, 0, self.calo_hl*2], radius = self.calo_ir)
         self.outer_cylinder = Cylinder(point = [0, 0, 0], vector = [0, 0, self.calo_hl*2], radius = self.calo_or)
+
+        self.rng = cfg["rng"]
 
     def getRandomPointCalo(self, x, y, z, px, py, pz):
 
@@ -48,7 +50,7 @@ class Geometry:
             out_in_vector = Vector(outer_intersection[0] - inner_intersection[0])
 
             path_length_for_xsec = out_in_vector.norm()
-            rand = rng.uniform()
+            rand = self.rng.uniform()
             calo_interaction_lengths = path_length_for_xsec*(1-rand)/self.interaction_length
             vertex = inner_intersection[0] + rand*out_in_vector
 

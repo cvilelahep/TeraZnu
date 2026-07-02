@@ -1,0 +1,35 @@
+config_name = "FCC_idea_like"
+[calorimeter]
+# Assume calo HL is equal to inner radius (2.8m) + tower height (1.8m). 
+# Based on IDEA concept where transition between barrel and endcap happens at 45 degrees
+halflength = 4.6
+inner_radius = 2.8
+outer_radius = 4.6
+# Density of Pb in g/cm3
+density = 11.34
+Z = 82
+A = 208
+# Pion interaction length in cm
+interaction_length = 19.93
+[FCC]
+# From CDR, Z-pole first two years: 150 ab-1 at sqrts 88, 91, 94 GeV .
+
+# Luminosity in fb and sqrts in GeV. Assume half of lumi taken at the pole, and other half split between high and low values for lineshape measurement
+luminosity = 75000
+sqrts = 91.2 
+# luminosity = 37500
+# sqrts = 89.4
+# luminosity = 37500
+# sqrts = 93.0
+
+# Assume 2 interaction points
+N_IP = 2
+
+[Neutrino]
+# For simple cross section model. In cm2/Gev/nucleon. From PDG review.
+nu_CC_cross_section = 0.667e-38
+nubar_CC_cross_section = 0.334e-38
+
+[Constants]
+# in Kg
+proton_mass = 1.6726e-27
