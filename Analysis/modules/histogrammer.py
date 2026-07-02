@@ -51,31 +51,38 @@ class Histogrammer(BaseModule):
 
         plt.figure()
         for f, mask in flavour_mask.items():
-            plt.scatter(self.data[:,0][mask], self.data[:,1][mask], label = f)
+            plt.scatter(self.data[:,0][mask], self.data[:,1][mask], label = f, s = 0.01, alpha = 1)
         plt.xlabel("Neutrino vertex x [mm]")
         plt.ylabel("Neutrino vertex x [mm]")
         plt.legend()
 
         plt.figure()
         for f, mask in flavour_mask.items():
-            plt.scatter(self.data[:,2][mask], self.data[:,1][mask], label = f)
+            plt.scatter(self.data[:,2][mask], self.data[:,1][mask], label = f, s = 0.01, alpha = 1)
         plt.xlabel("Neutrino vertex z [mm]")
         plt.ylabel("Neutrino vertex x [mm]")
+        plt.legend()
 
         plt.figure()
         for f, mask in flavour_mask.items():
-            plt.hist(self.data[:,4][mask], range = (35000, 55000), bins = 20, weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f, histtype = "step")
+            plt.hist(self.data[:,4][mask], range = (41000, 47000), bins = 20, weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f, histtype = "step")
         plt.xlabel("Neutrino energy [MeV]")
+        plt.legend()
 
-        plt.figure()
-
-        vertex_norm = np.sqrt(np.multiply(self.data[:,0], np.multiply(self.data[:,1], self.data[:,2])))
+        vertex_norm = np.sqrt(np.square(self.data[:,0]) + np.square(self.data[:,1]) +  np.square(self.data[:,2]))
         cos_theta = np.divide(self.data[:,2], vertex_norm)
 
+        plt.figure()
         for f, mask in flavour_mask.items():
             plt.hist(cos_theta[mask], range = (-1, 1), bins = 20, histtype = "step", label = f)
         plt.xlabel(r"cos$\theta$")
+        plt.legend()
 
+        plt.figure()
+        for f,mask in flavour_mask.items():
+            plt.hist(self.data[:,5][mask], range = (0., 20e-10), bins = 20, histtype = "step", weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f)
+        plt.xlabel("Neutrino interaction probability")
+        plt.legend()
 
         plt.show()
 

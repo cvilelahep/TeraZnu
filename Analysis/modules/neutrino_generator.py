@@ -74,8 +74,6 @@ class NeutrinoGenerator(BaseModule):
         nu_gen_record["energy"] = energy[i_nu]
         nu_gen_record["pid"] = pid[i_nu]
 
-
-
         # TO-DO (with neutrino simulation)
         # Add hadronic energy
         # Add puch-through energy

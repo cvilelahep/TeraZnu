@@ -14,13 +14,14 @@ interaction_length = 19.93
 [FCC]
 # From CDR, Z-pole first two years: 150 ab-1 at sqrts 88, 91, 94 GeV .
 
-# Luminosity in fb and sqrts in GeV. Assume half of lumi taken at the pole, and other half split between high and low values for lineshape measurement
-luminosity = 75000
+# Luminosity in fb and sqrts in GeV.
+# From https://arxiv.org/pdf/2505.00274 Section 2.1.1
+luminosity = 125000
 sqrts = 91.2 
-# luminosity = 37500
-# sqrts = 89.4
-# luminosity = 37500
-# sqrts = 93.0
+# luminosity = 40000
+# sqrts = 87.9
+# luminosity = 40000
+# sqrts = 94.3
 
 # Assume 2 interaction points
 N_IP = 2
