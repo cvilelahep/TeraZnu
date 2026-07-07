@@ -1,5 +1,5 @@
 config_name = "FCC_idea_like"
-[calorimeter]
+[hadron_calorimeter]
 # Assume calo HL is equal to inner radius (2.8m) + tower height (1.8m). 
 # Based on IDEA concept where transition between barrel and endcap happens at 45 degrees
 halflength = 4.6
@@ -11,9 +11,10 @@ Z = 82
 A = 208
 # Pion interaction length in cm
 interaction_length = 19.93
-[FCC]
-# From CDR, Z-pole first two years: 150 ab-1 at sqrts 88, 91, 94 GeV .
+max_eta = 2.595
+[electromagnetic_calorimeter]
 
+[FCC]
 # Luminosity in fb and sqrts in GeV.
 # From https://arxiv.org/pdf/2505.00274 Section 2.1.1
 luminosity = 125000
