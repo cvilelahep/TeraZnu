@@ -1,0 +1,46 @@
+config_name = "FCC_CLD_like"
+[hadron_calorimeter]
+# https://arxiv.org/pdf/1911.12230
+
+halflength = 3.705
+inner_radius = 2.4
+# If tower length defined, use towers a la IDEA
+#tower_length = 1.8
+# Else, if outer radius defined, calorimeter will be a cylindrical barrel.
+outer_radius = 3.566
+endcap_min_radius = 0.34
+# Density of 44 layers x 2 cm Fe = 88 cm Fe
+# Effective density: 7.874 x 88/116.6 = 5.9
+density = 5.9
+Z = 26
+A = 56
+# Pion interaction length in cm
+interaction_length = 20.42
+
+[electromagnetic_calorimeter]
+
+# BGO density 7 g / cm 3
+# Cristal length 20 cm (including back and front).
+# About 8% more interactions.
+
+[FCC]
+# Luminosity in fb and sqrts in GeV.
+# From https://arxiv.org/pdf/2505.00274 Section 2.1.1
+luminosity = 125000
+sqrts = 91.2 
+# luminosity = 40000
+# sqrts = 87.9
+# luminosity = 40000
+# sqrts = 94.3
+
+# Assume 2 interaction points
+N_IP = 4
+
+[Neutrino]
+# For simple cross section model. In cm2/Gev/nucleon. From PDG review.
+nu_CC_cross_section = 0.667e-38
+nubar_CC_cross_section = 0.334e-38
+
+[Constants]
+# in Kg
+proton_mass = 1.6726e-27
