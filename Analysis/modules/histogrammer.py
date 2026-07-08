@@ -80,7 +80,7 @@ class Histogrammer(BaseModule):
         x = np.arange(-1, 1, 0.01)
         for f, mask in flavour_mask.items():
             plt.hist(cos_theta[mask], range = (-1.5, 1.5), bins = 30, weights = self.data[:,5][mask]*self.N_norm/self.counter, histtype = "step", label = f)
-            nuAfb = 0.1*np.sum(self.data[:,5][mask]*self.N_norm/self.counter)*funAfb(x, np.sign(f)*0.1468*3/4)
+            nuAfb = 0.1*np.sum(self.data[:,5][mask]*self.N_norm/self.counter)*funAfb(x, np.sign(f)*0.1468*3/4) # PDG Theory value
             plt.plot(x, nuAfb, label = f"SM prediction: {f}")    
         plt.xlabel(r"cos$\theta$")
         plt.legend()

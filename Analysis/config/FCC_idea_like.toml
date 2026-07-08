@@ -16,7 +16,8 @@ Z = 29
 A = 63
 # Pion interaction length in cm: 18.51
 interaction_length = 9.255
-max_eta = 2.595
+#max_eta = 2.595
+max_eta = 1000
 
 [electromagnetic_calorimeter]
 
