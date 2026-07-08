@@ -14,14 +14,10 @@ endcap_min_radius = 0.34
 density = 5.9
 Z = 26
 A = 56
-# Pion interaction length in cm
-interaction_length = 20.42
+# Pion interaction length in cm: 20.42
+interaction_length = 15.41
 
 [electromagnetic_calorimeter]
-
-# BGO density 7 g / cm 3
-# Cristal length 20 cm (including back and front).
-# About 8% more interactions.
 
 [FCC]
 # Luminosity in fb and sqrts in GeV.

@@ -5,7 +5,7 @@ config_name = "FCC_CLD_like"
 halflength = 5.4
 inner_radius = 2.8
 # If tower length defined, use towers a la IDEA
-#tower_length = 1.8
+# tower_length = 1.8
 # Else, if outer radius defined, calorimeter will be a cylindrical barrel.
 outer_radius = 4.2
 endcap_min_radius = 0.3
@@ -14,14 +14,10 @@ endcap_min_radius = 0.3
 density = 4.9
 Z = 26
 A = 56
-# Pion interaction length in cm
-interaction_length = 20.42
+# Pion interaction length in cm: 20.42
+interaction_length = 12.76
 
 [electromagnetic_calorimeter]
-
-# BGO density 7 g / cm 3
-# Cristal length 20 cm (including back and front).
-# About 8% more interactions.
 
 [FCC]
 # Luminosity in fb and sqrts in GeV.

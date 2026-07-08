@@ -1,4 +1,5 @@
 config_name = "FCC_idea_like"
+# https://arxiv.org/html/2502.21223v4
 [hadron_calorimeter]
 # Based on IDEA concept where transition between barrel and endcap happens at 45 degrees
 halflength = 4.6
@@ -7,13 +8,14 @@ inner_radius = 2.8
 tower_length = 1.8
 # Else, if outer radius defined, calorimeter will be a cylindrical barrel.
 #outer_radius = 4.6
-# Density of Pb in g/cm3
-density = 11.34 
+# Density of Cu in g/cm3
+# Assume 50% copper by volume. Precise number depends on final design. Cu density: 8.96 g/cm3
+density = 4.48
 # But there is air and fibres in the calo. The effective interaction length is 25 cm. If we scale the density by the number of interaction lengths, the effective density becomes 9 g/cm3.
-Z = 82
-A = 208
-# Pion interaction length in cm
-interaction_length = 19.93
+Z = 29
+A = 63
+# Pion interaction length in cm: 18.51
+interaction_length = 9.255
 max_eta = 2.595
 
 [electromagnetic_calorimeter]
