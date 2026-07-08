@@ -6,6 +6,13 @@ from hepunits import units as u
 
 import matplotlib.pyplot as plt
 
+SM_Afb = {12: 0.1468*3/4,
+          14: 0.1468*3/4,
+          16: 0.1468*3/4,
+          11: 0.01617,
+          13: 0.01617,
+          15: 0.01617}
+
 def funAfb(costheta, afb):
     return 3./8*(1 + costheta**2 + 8./3*afb*costheta)
 
@@ -40,7 +47,10 @@ class Histogrammer(BaseModule):
                           nu_record["vertex"][2],
                           nu_record["pid"],
                           nu_record["energy"],
-                          nu_record["interaction_prob"]])
+                          nu_record["interaction_prob"],
+                          nu_record["momentum"][0],
+                          nu_record["momentum"][1],
+                          nu_record["momentum"][2]])
     def end(self):
         self.data = np.array(self.data)
         
@@ -76,18 +86,36 @@ class Histogrammer(BaseModule):
         vertex_norm = np.sqrt(np.square(self.data[:,0]) + np.square(self.data[:,1]) +  np.square(self.data[:,2]))
         cos_theta = np.divide(self.data[:,2], vertex_norm)
 
+        #momentum_norm = np.sqrt(np.square(self.data[:,6]) + np.square(self.data[:,7]) + np.square(self.data[:,8]))
+        #cos_theta = np.divide(self.data[:,8], momentum_norm)
+
         plt.figure()
         x = np.arange(-1, 1, 0.01)
         for f, mask in flavour_mask.items():
             plt.hist(cos_theta[mask], range = (-1.5, 1.5), bins = 30, weights = self.data[:,5][mask]*self.N_norm/self.counter, histtype = "step", label = f)
-            nuAfb = 0.1*np.sum(self.data[:,5][mask]*self.N_norm/self.counter)*funAfb(x, np.sign(f)*0.1468*3/4) # PDG Theory value
+            nuAfb = 0.1*np.sum(self.data[:,5][mask]*self.N_norm/self.counter)*funAfb(x, np.sign(f)*SM_Afb[abs(f)]) # PDG Theory value
             plt.plot(x, nuAfb, label = f"SM prediction: {f}")    
         plt.xlabel(r"cos$\theta$")
         plt.legend()
 
         plt.figure()
+        phi = np.arctan2(self.data[:,1], self.data[:,0])
+        for f, mask in flavour_mask.items():
+            plt.hist(phi[mask], range = (-3.5, 3.5), bins = 70, weights = self.data[:,5][mask]*self.N_norm/self.counter, histtype = "step", label = f)
+        plt.xlabel(r"$\phi$")
+        plt.legend()
+
+        for f, mask in flavour_mask.items():
+            plt.figure()
+            plt.hist2d(phi[mask], cos_theta[mask], range = ((-3.5, 3.5), (-1.5, 1.5)), bins = (70, 30), weights = self.data[:,5][mask]*self.N_norm/self.counter)
+            plt.xlabel(r"$\phi$")
+            plt.ylabel(r"cos$\theta$")
+            plt.title(f"{f}")
+            plt.colorbar()
+        
+        plt.figure()
         for f,mask in flavour_mask.items():
-            plt.hist(self.data[:,5][mask], range = (0., 20e-10), bins = 20, histtype = "step", weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f)
+            plt.hist(self.data[:,5][mask], range = (0., 20e-10), bins = 80, histtype = "step", weights = self.data[:,5][mask]*self.N_norm/self.counter, label = f)
         plt.xlabel("Neutrino interaction probability")
         plt.legend()
 

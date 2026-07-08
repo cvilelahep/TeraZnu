@@ -77,7 +77,7 @@ class Geometry:
 
         if abs((outer_intersection - pos)[2]) > self.calo_hl:
             # In the barrel
-            sign = +1 if (outer_intersection[0] - pos)[2] > 0 else -1
+            sign = +1 if (outer_intersection - pos)[2] > 0 else -1
             if self.calo_tower_length is not None:
                 inner_plane_position = sign*(self.calo_hl-self.calo_tower_length*np.arctan2(self.calo_ir+self.calo_tower_length, self.calo_hl))
             else:
