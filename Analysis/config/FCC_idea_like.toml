@@ -22,7 +22,7 @@ max_eta = 2.595
 
 # BGO density 7 g / cm 3
 # Cristal length 20 cm (including back and front).
-# About 8% more interactions.
+# About 18% more interactions.
 
 [FCC]
 # Luminosity in fb and sqrts in GeV.

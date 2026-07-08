@@ -5,6 +5,10 @@ import numpy as np
 from hepunits import units as u
 
 import matplotlib.pyplot as plt
+
+def funAfb(costheta, afb):
+    return 3./8*(1 + costheta**2 + 8./3*afb*costheta)
+
 class Histogrammer(BaseModule):
     
     @property
@@ -73,8 +77,11 @@ class Histogrammer(BaseModule):
         cos_theta = np.divide(self.data[:,2], vertex_norm)
 
         plt.figure()
+        x = np.arange(-1, 1, 0.01)
         for f, mask in flavour_mask.items():
             plt.hist(cos_theta[mask], range = (-1.5, 1.5), bins = 30, weights = self.data[:,5][mask]*self.N_norm/self.counter, histtype = "step", label = f)
+            nuAfb = 0.1*np.sum(self.data[:,5][mask]*self.N_norm/self.counter)*funAfb(x, np.sign(f)*0.1468*3/4)
+            plt.plot(x, nuAfb, label = f"SM prediction: {f}")    
         plt.xlabel(r"cos$\theta$")
         plt.legend()
 
