@@ -1,6 +1,7 @@
 from base_module import BaseModule
 from event_record import EventRecord
 import numpy as np
+import uproot
 
 from hepunits import units as u
 class NeutrinoGenerator(BaseModule):
@@ -9,13 +10,48 @@ class NeutrinoGenerator(BaseModule):
     def name(self) -> str:
         return "NeutrinoGenerator"
 
+    def cross_section(self, pdg, energy, cc):
+        try:
+            splines = getattr(self, "xsec_splines")
+            cc_string = "cc" if cc else "nc"
+
+            e_bin = np.digitize(energy, splines[cc_string][pdg][0]*u.GeV)
+            return splines[cc_string][pdg][1][e_bin]*1e-38*u.cm2
+
+        except AttributeError:
+            if pdg > 0:
+                if cc:
+                    return self.nu_CC_cross_section*energy
+                else:
+                    return self.nu_NC_cross_section*energy
+            else:
+                if cc:
+                    return self.nubar_CC_cross_section*energy
+                else:
+                    return self.nubar_NC_cross_section*energy
+
+
     def __init__(self, geometry, cfg):
         self.geometry = geometry
         # For now use linear approximation. In future, get from generator (MadGraph?)
-        self.nu_CC_cross_section = cfg["Neutrino"]["nu_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
-        self.nubar_CC_cross_section = cfg["Neutrino"]["nubar_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleon; PDG 2025 world-average
+        self.nu_CC_cross_section = cfg["hadron_calorimeter"]["A"]*cfg["Neutrino"]["nu_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleus; PDG 2025 world-average
+        self.nubar_CC_cross_section = cfg["hadron_calorimeter"]["A"]*cfg["Neutrino"]["nubar_CC_cross_section"]*u.cm2/u.GeV # cm2/GeV/nucleus; PDG 2025 world-average
+        if "cross_section_spline_file" in cfg["Neutrino"].keys():
+            if (cfg["hadron_calorimeter"]["A"] == 56) and (cfg["hadron_calorimeter"]["Z"] == 26):
+                self.xsec_splines = {}
+                self.xsec_splines["cc"] = {}
+                self.xsec_splines["nc"] = {}
 
-        self.target_density = self.geometry.density / (cfg["Constants"]["proton_mass"]*u.kg) # nucleons / cm3
+                nuc_name = "Fe56"
+                with uproot.open(cfg["Neutrino"]["cross_section_spline_file"]) as f:
+                    for barness, sign in [["bar_", -1], ["", 1]]:
+                        for p_id, p_flav in [[12, "e"], [14, "mu"]]:
+                            self.xsec_splines["cc"][sign*p_id] = f[f"nu_{p_flav}_{barness}{nuc_name}"]["tot_cc"].values()
+                            self.xsec_splines["nc"][sign*p_id] = f[f"nu_{p_flav}_{barness}{nuc_name}"]["tot_nc"].values() 
+            else:
+                print("Neutrino generator WARNING: nucleus not defined in spline file. Using simplified cross section model")
+
+        self.target_density = self.geometry.density / (cfg["hadron_calorimeter"]["A"]*cfg["Constants"]["dalton"]*u.kg) # nuclei / cm3
        
         self.rng = cfg["rng"]
 
@@ -51,9 +87,9 @@ class NeutrinoGenerator(BaseModule):
 
         interaction_probability = []
         for i in range(len(path_length)):
-            x_sec = self.nu_CC_cross_section*energy[i] if pid[i] > 0 else self.nubar_CC_cross_section*energy[i] # cm2 / nucleon
-            interaction_probability.append(x_sec*self.target_density*path_length[i])
-        
+            this_x_sec = self.cross_section(pid[i], energy[i], True) # cm2 / nucleus
+            interaction_probability.append(this_x_sec*self.target_density*path_length[i])
+
         cumulative = np.cumsum(interaction_probability)
 
         # No neutrinos in the acceptance. Do nothing.

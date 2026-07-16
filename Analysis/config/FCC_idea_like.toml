@@ -11,9 +11,11 @@ tower_length = 1.8
 # Density of Cu in g/cm3
 # Assume 50% copper by volume. Precise number depends on final design. Cu density: 8.96 g/cm3
 density = 4.48
-# But there is air and fibres in the calo. The effective interaction length is 25 cm. If we scale the density by the number of interaction lengths, the effective density becomes 9 g/cm3.
-Z = 29
-A = 63
+#Z = 29
+#A = 63
+# For GENIE xsec, use iron
+Z = 26
+A = 56
 # Pion interaction length in cm: 18.51
 interaction_length = 9.255
 max_eta = 2.595
@@ -41,7 +43,8 @@ N_IP = 4
 # For simple cross section model. In cm2/Gev/nucleon. From PDG review.
 nu_CC_cross_section = 0.667e-38
 nubar_CC_cross_section = 0.334e-38
+cross_section_spline_file = "data/DIS_Fe_50GeV_splines_12_14.root"
 
 [Constants]
 # in Kg
-proton_mass = 1.6726e-27
+dalton = 1.661e-27

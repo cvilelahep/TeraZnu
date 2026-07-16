@@ -36,7 +36,9 @@ N_IP = 4
 # For simple cross section model. In cm2/Gev/nucleon. From PDG review.
 nu_CC_cross_section = 0.667e-38
 nubar_CC_cross_section = 0.334e-38
+cross_section_spline_file = "data/DIS_Fe_50GeV_splines_12_14.root"
 
 [Constants]
 # in Kg
-proton_mass = 1.6726e-27
+dalton = 1.661e-27
+
