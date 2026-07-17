@@ -45,9 +45,13 @@ class Geometry:
         if "max_eta" in cfg["hadron_calorimeter"]:
             self.max_eta = cfg["hadron_calorimeter"]["max_eta"]
             self.endcap_min_radius = None
+            cfg["hadron_calorimeter"]["max_costheta"] = np.cos(2*np.arctan(np.exp(-self.max_eta)))
         elif "endcap_min_radius" in cfg["hadron_calorimeter"]:
             self.endcap_min_radius = cfg["hadron_calorimeter"]["endcap_min_radius"]
             self.max_eta = None
+            cfg["hadron_calorimeter"]["max_costheta"] = np.cos(np.arctan2(cfg["hadron_calorimeter"]["endcap_min_radius"], 
+                                                                          cfg["hadron_calorimeter"]["halflength"]))
+
         if self.endcap_min_radius is not None and self.max_eta is not None:
             raise RuntimeError("Geometry configuration error. Only one of calorimeter minimum endcap radius and max eta can be defined, not both.")
 
@@ -98,7 +102,7 @@ class Geometry:
                 if abs(np.arctanh(inner_intersection[2]/mod_inner_intersection)) > self.max_eta:
                     return {"path_length_for_xsec": 0., "calo_interaction_length": 0., "vertex": [0, 0, 0]}            
             elif self.endcap_min_radius:
-                if (outer_intersection[0]**2 + outer_intersection[1]**2)**0.5 < self.endcap_min_radius:
+                if (inner_intersection[0]**2 + inner_intersection[1]**2)**0.5 < self.endcap_min_radius:
                     return {"path_length_for_xsec": 0., "calo_interaction_length": 0., "vertex": [0, 0, 0]}
 
         out_in_vector = Vector(outer_intersection - inner_intersection)

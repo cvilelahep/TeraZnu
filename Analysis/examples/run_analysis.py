@@ -63,6 +63,7 @@ def main():
             jet_counts.append(jets["n_jets"])
         if filt.get("passed"):
             n_passed += 1
+    plt.show()
 
     # ── Print summary ─────────────────────────────────────────────────────
     if ht_values:

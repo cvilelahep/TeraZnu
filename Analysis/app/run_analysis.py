@@ -10,6 +10,7 @@ from framework import Framework
 from geometry import Geometry
 from modules.neutrino_generator import NeutrinoGenerator
 from modules.histogrammer import Histogrammer
+from modules.afb_analysis import AfbAnalysis
 
 from config_module import Config
 
@@ -37,7 +38,10 @@ def main():
     fw.add_module(NeutrinoGenerator(geometry, cfg))
 
     # Histogrammer
-    fw.add_module(Histogrammer(cfg))
+    #fw.add_module(Histogrammer(cfg))
+
+    # Afb analysis
+    fw.add_module(AfbAnalysis(cfg))
 
     for record in fw.run():
         pass
