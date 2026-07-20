@@ -6,7 +6,8 @@ from hepunits import units as u
 class HepmcReader:
     def __init__(self, path: str):
         self.path = path
-
+        with pyhepmc.open(self.path) as f_hepmc:
+            print(f_hepmc)
     def __iter__(self) -> Iterator[EventRecord]:
         with pyhepmc.open(self.path) as f_hepmc:
             while(event := f_hepmc.read()): 

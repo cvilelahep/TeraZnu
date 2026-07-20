@@ -87,6 +87,11 @@ class AfbAnalysis(BaseModule):
         print("MINUIT")
         print(m.values, m.errors)
 
+        print("Integrals")
+        for f, mask in flavour_mask.items():
+            this_afb = (np.sum(cos_theta[mask] > 0) - np.sum(cos_theta[mask] <= 0))/(len(cos_theta[mask]))
+            print(f"{f} {this_afb:.2f}")
+
         plt.figure()
         x = np.arange(-self.max_costheta, self.max_costheta, 0.01)
         bins = 30

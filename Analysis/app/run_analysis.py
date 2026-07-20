@@ -38,7 +38,7 @@ def main():
     fw.add_module(NeutrinoGenerator(geometry, cfg))
 
     # Histogrammer
-    #fw.add_module(Histogrammer(cfg))
+    fw.add_module(Histogrammer(cfg))
 
     # Afb analysis
     fw.add_module(AfbAnalysis(cfg))
