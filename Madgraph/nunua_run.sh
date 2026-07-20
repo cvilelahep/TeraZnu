@@ -9,7 +9,7 @@ flav=$2
 echo Generating flavor $2
 # Define the process you want to simulate
 #PROCESS="generate e+ e- > v$flav v$flav~ a"
-PROCESS="generate e- e+ > v$flav v$flav~"
+PROCESS="generate e- e+ > $flav $flav~"
 
 nevents=$3
 
